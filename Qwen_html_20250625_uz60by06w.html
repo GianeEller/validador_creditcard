@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Identificador de Cartão</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 10px;
+      width: 100%;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .resultado {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Identifique a Bandeira do Cartão</h2>
+  <input type="text" id="numeroCartao" placeholder="Digite o número do cartão" />
+  <button onclick="verificarBandeira()">Verificar</button>
+  <div class="resultado" id="resultado"></div>
+</div>
+
+<script>
+function limparNumeroCartao(numero) {
+    return numero.replace(/\D/g, '');
+}
+
+function identificarBandeira(numero) {
+    const numeroLimpo = limparNumeroCartao(numero);
+    const tamanho = numeroLimpo.length;
+
+    if (tamanho === 0) return "Número inválido.";
+
+    // Visa
+    if (numeroLimpo.startsWith('4')) {
+        if (tamanho === 13 || tamanho === 16) return "Visa";
+    }
+
+    // Mastercard
+    if (tamanho === 16) {
+        const primeiro2 = parseInt(numeroLimpo.substring(0, 2));
+        const primeiro4 = parseInt(numeroLimpo.substring(0, 4));
+
+        if (primeiro2 >= 51 && primeiro2 <= 55) return "Mastercard";
+        else if (primeiro4 >= 2221 && primeiro4 <= 2720) return "Mastercard";
+    }
+
+    // American Express
+    if ((numeroLimpo.startsWith('34') || numeroLimpo.startsWith('37')) && tamanho === 15) {
+        return "American Express";
+    }
+
+    // Discover
+    if (tamanho === 16 && (numeroLimpo.startsWith('6011') || numeroLimpo.startsWith('65'))) {
+        return "Discover";
+    }
+
+    // Diners Club
+    if (tamanho === 14) {
+        const prefixosDiners = ['300', '301', '302', '303', '304', '305', '36', '38', '39'];
+        for (let prefix of prefixosDiners) {
+            if (numeroLimpo.startsWith(prefix)) return "Diners Club";
+        }
+    }
+
+    // EnRoute
+    if (tamanho === 15 && (numeroLimpo.startsWith('2014') || numeroLimpo.startsWith('2149'))) {
+        return "EnRoute";
+    }
+
+    // JCB
+    if (tamanho === 16) {
+        const primeiro4JCB = parseInt(numeroLimpo.substring(0, 4));
+        if (primeiro4JCB >= 3528 && primeiro4JCB <= 3589) return "JCB";
+    }
+
+    // Voyager
+    if (tamanho === 16 && numeroLimpo.startsWith('8699')) {
+        return "Voyager";
+    }
+
+    // HiperCard
+    if (tamanho === 16) {
+        const prefixosHiperCard = ['637038', '637599'];
+        for (let prefix of prefixosHiperCard) {
+            if (numeroLimpo.startsWith(prefix)) return "HiperCard";
+        }
+    }
+
+    // Aura
+    if ((tamanho === 16 || tamanho === 19) && numeroLimpo.startsWith('5078')) {
+        return "Aura";
+    }
+
+    return "Bandeira desconhecida";
+}
+
+function verificarBandeira() {
+    const numero = document.getElementById("numeroCartao").value;
+    const resultadoDiv = document.getElementById("resultado");
+    resultadoDiv.textContent = identificarBandeira(numero);
+}
+</script>
+
+</body>
+</html>

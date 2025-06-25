@@ -1,0 +1,6 @@
+﻿Bandeira,Prefixo(s),Comprimento(s)
+Visa,4,13 ou 16 dígitos
+Mastercard,51-55 ou 2221-2720,16 dígitos
+American Express (Amex),34 ou 37,15 dígitos
+Discover,"6011, 65",16 dígitos
+Diners Club,"300-305, 36, 38, 39",14 dígitos

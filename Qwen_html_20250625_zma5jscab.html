@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Identificador de Cartão</title>
+</head>
+<body>
+    <script>
+        function limparNumeroCartao(numero) {
+            return numero.replace(/\D/g, '');
+        }
+
+        function identificarBandeira(numero) {
+            const numeroLimpo = limparNumeroCartao(numero);
+            const tamanho = numeroLimpo.length;
+
+            if (tamanho === 0) return "Número inválido.";
+
+            if (numeroLimpo.startsWith('4')) {
+                if (tamanho === 13 || tamanho === 16) return "Visa";
+            }
+
+            if (tamanho === 16) {
+                const primeiro2 = parseInt(numeroLimpo.substring(0, 2));
+                const primeiro4 = parseInt(numeroLimpo.substring(0, 4));
+
+                if (primeiro2 >= 51 && primeiro2 <= 55) return "Mastercard";
+                if (primeiro4 >= 2221 && primeiro4 <= 2720) return "Mastercard";
+            }
+
+            if ((numeroLimpo.startsWith('34') || numeroLimpo.startsWith('37')) && tamanho === 15) {
+                return "American Express";
+            }
+
+            if (tamanho === 16) {
+                if (numeroLimpo.startsWith('6011') || numeroLimpo.startsWith('65')) return "Discover";
+            }
+
+            if (tamanho === 14) {
+                const prefixosDiners = ['300', '301', '302', '303', '304', '305', '36', '38', '39'];
+                for (let prefix of prefixosDiners) {
+                    if (numeroLimpo.startsWith(prefix)) return "Diners Club";
+                }
+            }
+
+            return "Bandeira desconhecida";
+        }
+
+        let numeroCartao = prompt("Digite o número do cartão de crédito:");
+        let bandeira = identificarBandeira(numeroCartao);
+        alert("Bandeira identificada: " + bandeira);
+    </script>
+</body>
+</html>
